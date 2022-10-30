@@ -3,15 +3,29 @@ import axios from "axios";
 
 function Users() {
     const [users,setUsers] = useState([]);
+    const [posts,setPosts] = useState([]);
     const [loading,setLoading] = useState(true);
 
     useEffect(()=> {
-        axios("https://jsonplaceholder.typicode.com/users")
-        .then((res) =>  {setUsers(res.data)})
-    
-        .finally(() => setLoading(false));
+       // axios("https://jsonplaceholder.typicode.com/users")
+       //.then((res) =>  {
+       // setUsers(res.data)})
+       // .finally(() => setLoading(false));
+       getData();
     },[]);
-  
+
+    const getData = async() =>{
+      const {data:users} = await axios(
+        "https://jsonplaceholder.typicode.com/users"
+      );
+      const {data:posts} = await axios(
+        `https://jsonplaceholder.typicode.com/posts`
+      );
+        setLoading(false);
+        setUsers(users);
+        setPosts(posts);
+        console.log(posts)
+    };
     return (
 
       <div>
@@ -22,11 +36,18 @@ function Users() {
         <li key={user.id}> {user.name}</li>
          )}
       </ul>
-      
-      
+      <h2>Posts</h2>
+      <ul>
+        {posts.map((post)=>
+        <li key={post.id}> {post.title}</li>
+         )}
+      </ul>
       </div>
     )
-  }
+    }
+  
+    
+  
 
 
 export default Users
