@@ -7,27 +7,29 @@ function Users() {
     const [loading,setLoading] = useState(true);
 
     useEffect(()=> {
+      (async() => {
+        try{
+          const {data:users} = await axios(
+            "https://jsonplaceholder.typicode.com/users"
+          );
+          const {data:posts} = await axios(
+            `https://jsonplaceholder.typicode.com/posts`
+          );
+            setLoading(false);
+            setUsers(users);
+            setPosts(posts);
+            console.log(posts)
+        } catch (error){
+          console.log("error",error)
+        }
+      })() 
        // axios("https://jsonplaceholder.typicode.com/users")
        //.then((res) =>  {
        // setUsers(res.data)})
        // .finally(() => setLoading(false));
-       getData();
     },[]);
-
-    const getData = async() =>{
-      const {data:users} = await axios(
-        "https://jsonplaceholder.typicode.com/users"
-      );
-      const {data:posts} = await axios(
-        `https://jsonplaceholder.typicode.com/posts`
-      );
-        setLoading(false);
-        setUsers(users);
-        setPosts(posts);
-        console.log(posts)
-    };
+    
     return (
-
       <div>
       <h1>Users</h1>
       {loading && <div>Yükleniyor</div>}
@@ -45,9 +47,4 @@ function Users() {
       </div>
     )
     }
-  
-    
-  
-
-
 export default Users
